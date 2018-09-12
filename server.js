@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -9,6 +10,7 @@ var db;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cors());
 app.set('view engine', 'ejs');
 
 MongoClient.connect('mongodb://EvertV:'+process.env.DB_PASS+'@ds251902.mlab.com:51902/spotify-listen-along', { useNewUrlParser: true }, (err, client) => {
