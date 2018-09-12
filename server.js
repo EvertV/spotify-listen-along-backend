@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 
-MongoClient.connect('mongodb://EvertV:aardappel123@ds251902.mlab.com:51902/spotify-listen-along', { useNewUrlParser: true }, (err, client) => {
+MongoClient.connect('mongodb://EvertV:'+process.env.DB_PASS+'@ds251902.mlab.com:51902/spotify-listen-along', { useNewUrlParser: true }, (err, client) => {
   if(err) return console.log(err);
   db = client.db('spotify-listen-along');
   app.listen(port, () => {
@@ -65,8 +65,10 @@ var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
 var client_id = '1700dc4dc09346b086f2236271889cb8'; // Your client id
-var client_secret = '49f5aa9c2ab040d38272a621aad6e3e0'; // Your secret
-var redirect_uri = 'http://localhost:5000/callback'; // Or Your redirect uri
+var client_secret = process.env.SPOTIFY_SECRET; // Your secret
+let redirect_uri =
+  process.env.REDIRECT_URI ||
+  'http://localhost:'+port+'/callback'
 
 /**
  * Generates a random string containing numbers and letters
@@ -153,7 +155,8 @@ app.get('/callback', function(req, res) {
 
         // we can also pass the token to the browser to make requests from there
         // res.json(access_token, refresh_token);
-        res.redirect('http://localhost:3000/#' +
+        let uri = process.env.FRONTEND_URI || 'http://localhost:3000'
+        res.redirect(uri+'#' +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token
