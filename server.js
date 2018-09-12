@@ -154,7 +154,7 @@ app.get('/callback', function(req, res) {
 
         // we can also pass the token to the browser to make requests from there
         // res.json(access_token, refresh_token);
-        let uri = process.env.FRONTEND_URI || 'http://localhost:3000'
+        let uri = process.env.FRONTEND_URI || 'http://localhost:'+port
         res.redirect(uri+'#' +
           querystring.stringify({
             access_token: access_token,
