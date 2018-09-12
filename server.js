@@ -95,7 +95,7 @@ app.get('/login', function(req, res) {
 
   // your application requests authorization
   var scope = 'user-read-private user-read-email user-read-playback-state';
-  res.send('https://accounts.spotify.com/authorize?' +
+  res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
       client_id: client_id,
@@ -154,7 +154,7 @@ app.get('/callback', function(req, res) {
 
         // we can also pass the token to the browser to make requests from there
         // res.json(access_token, refresh_token);
-        let uri = process.env.FRONTEND_URI || 'http://localhost:'+port
+        let uri = process.env.FRONTEND_URI || 'http://localhost:3000';
         res.redirect(uri+'#' +
           querystring.stringify({
             access_token: access_token,
