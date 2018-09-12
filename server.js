@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
 const app = express();
-const port = 5000;
+const port = 8080;
 
 const MongoClient = mongodb.MongoClient;
 var db;
@@ -88,7 +88,7 @@ var stateKey = 'spotify_auth_state';
 app.use(express.static(__dirname + '/public'))
    .use(cookieParser());
 
-app.get('/api/login', function(req, res) {
+app.get('/login', function(req, res) {
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
