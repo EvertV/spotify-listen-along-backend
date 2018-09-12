@@ -44,7 +44,7 @@ app.post('/delete/:id', (req, res) => {
     if (err) return console.log(err);
 
     console.log('Deleted', req.params.id, 'from database');
-    res.redirect('/');
+    // res.redirect('/');
   })
 });
 
@@ -57,7 +57,6 @@ app.post('/api/update/:userid', (req, res) => {
     if (err) return console.log(err);
 
     console.log('Saved to database', req.body);
-    res.redirect('/');
   })
 });
 
@@ -155,7 +154,7 @@ app.get('/callback', function(req, res) {
 
         // we can also pass the token to the browser to make requests from there
         // res.json(access_token, refresh_token);
-        let uri = process.env.FRONTEND_URI || 'http://localhost:'+port
+        let uri = process.env.FRONTEND_URI || 'http://localhost:3000'
         res.redirect(uri+'#' +
           querystring.stringify({
             access_token: access_token,
