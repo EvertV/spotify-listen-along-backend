@@ -8,9 +8,9 @@ const port = process.env.PORT || 8080;
 const MongoClient = mongodb.MongoClient;
 var db;
 
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(cors());
 app.set('view engine', 'ejs');
 //localhost:27017
 //EvertV:'+process.env.DB_PASS+'@ds251902.mlab.com:51902
