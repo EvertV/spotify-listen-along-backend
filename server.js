@@ -12,8 +12,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cors());
 app.set('view engine', 'ejs');
-
-MongoClient.connect('mongodb://EvertV:'+process.env.DB_PASS+'@ds251902.mlab.com:51902/spotify-listen-along', { useNewUrlParser: true }, (err, client) => {
+//localhost:27017
+//EvertV:'+process.env.DB_PASS+'@ds251902.mlab.com:51902
+//mongodb+srv://EvertV:'+process.env.DB_PASS+'@spotify-listen-along-mpn03.gcp.mongodb.net/spotify-listen-along?retryWrites=true
+MongoClient.connect('mongodb+srv://EvertV:'+process.env.DB_PASS+'@spotify-listen-along-mpn03.gcp.mongodb.net/spotify-listen-along?retryWrites=true', { useNewUrlParser: true }, (err, client) => {
   if(err) return console.log(err);
   db = client.db('spotify-listen-along');
   app.listen(port, () => {
@@ -31,33 +33,37 @@ app.get('/api/quotes', (req, res) => {
 });
 
 app.get('/api/allplaying', (req, res) => {
-  var cursor = db.collection('usersNowPlaying').find();
   db.collection('usersNowPlaying').find().toArray(function(err, result) {
     if (err) return console.log(err);
-
+    console.log('GET request allplaying successfull');
     res.json(result);
   })
 });
 
-app.post('/delete/:id', (req, res) => {
-  db.collection('quotes').deleteOne({"_id": mongodb.ObjectID(req.params.id)}, (err, result) => {
+app.get('/delete/undefined', (req, res) => {
+  db.collection('usersNowPlaying').deleteMany({"_id": "undefined"}, (err, result) => {
     if (err) return console.log(err);
 
-    console.log('Deleted', req.params.id, 'from database');
-    // res.redirect('/');
+    console.log('Deleted undefined from database');
+    res.send('done');
   })
+
 });
 
 app.post('/api/update/:userid', (req, res) => {
-  db.collection('usersNowPlaying').updateOne(
-   { "_id": req.params.userid },
-   { $set: req.body},
-   { upsert: true },
-   (err, result) => {
-    if (err) return console.log(err);
-
-    console.log('Saved to database', req.body);
-  })
+console.log('About to create/update', req.params.userid);
+  if(req.params.userid !== "undefined") {
+    db.collection('usersNowPlaying').updateOne(
+     { "_id": req.params.userid },
+     { $set: req.body},
+     { upsert: true },
+     (err, result) => {
+      if (err) return console.log(err);
+      console.log('Created/updated user in database', req.body);
+    })
+  } else {
+    console.log('nvm, cuz', req.params.userid);
+  }
 });
 
 
